@@ -13,7 +13,9 @@ import java.util.List;
 public class Role extends BaseModel {
 
     //list of permissions
+
     private String roleName;
+
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
 

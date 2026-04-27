@@ -1,5 +1,6 @@
 package com.scaler.userauthservice.models;
 
+import com.scaler.userauthservice.dtos.UserDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.Getter;
@@ -13,9 +14,18 @@ import java.util.List;
 public class User extends BaseModel {
 
     private String userName;
-    private String emailId;
+    private String email;
     private String password;
 
     @ManyToMany
     private List<Role> roles;
+
+    public UserDto getUserDto(){
+        UserDto userDto = new UserDto();
+        userDto.setId(this.getId());
+        userDto.setName(this.getUserName());
+        userDto.setEmail(this.getEmail());
+        userDto.setRoles(this.getRoles());
+        return userDto;
+    }
 }
