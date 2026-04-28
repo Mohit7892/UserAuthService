@@ -20,7 +20,7 @@ public class UserAuthService implements IAuthService {
     @Override
     public User signup(String username, String email, String password) throws UserAlreadyExistsException {
         Optional<User> optionalUser = userRepository.findByEmail(email);
-        if (optionalUser.isEmpty())
+        if (optionalUser.isPresent())
             throw new UserAlreadyExistsException("User with this email already exists!!",
                     email);
         User newUser = new User();
@@ -28,8 +28,12 @@ public class UserAuthService implements IAuthService {
         newUser.setEmail(email);
         newUser.setPassword(password);
         newUser.setState(State.ACTIVE);
-        newUser.setCreatedAt(System.currentTimeMillis());
-        newUser.setUpdatedAt(System.currentTimeMillis());
+
+        /*this can be done in auto from DB itself*/
+        //newUser.setCreatedAt(System.currentTimeMillis());
+        //newUser.setUpdatedAt(System.currentTimeMillis());
+
+        userRepository.save(newUser);
         return newUser;
     }
 
@@ -37,14 +41,14 @@ public class UserAuthService implements IAuthService {
     public User login(String email, String password) throws UserDoesNotExistException {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isEmpty())
-            throw new UserDoesNotExistException("User with email "+email+"does not exists!!");
+            throw new UserDoesNotExistException("User with email "+email+" does not exists!!");
         User user = new User();
         user.setUserName(optionalUser.get().getUserName());
         user.setEmail(email);
         user.setPassword(password);
         user.setState(State.ACTIVE);
-        user.setCreatedAt(System.currentTimeMillis());
-        user.setUpdatedAt(System.currentTimeMillis());
+        //user.setCreatedAt(System.currentTimeMillis());
+        //user.setUpdatedAt(System.currentTimeMillis());
         return user;
     }
 }

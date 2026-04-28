@@ -1,5 +1,10 @@
 package com.scaler.userauthservice.exceptions;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class UserAlreadyExistsException extends Exception {
     private String email;
     private String message;
