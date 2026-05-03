@@ -2,6 +2,8 @@ package com.scaler.userauthservice.models;
 
 import com.scaler.userauthservice.dtos.UserDto;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +17,7 @@ public class User extends BaseModel {
 
     private String userName;
     private String email;
-    private String password;
+    private String passwordHash;
 
     @ManyToMany
     private List<Role> roles;

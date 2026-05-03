@@ -1,7 +1,9 @@
 package com.scaler.userauthservice.controlleradvices;
 
+import com.scaler.userauthservice.dtos.InvalidPasswordExceptionDto;
 import com.scaler.userauthservice.dtos.UserAlreadyExistsExceptionDto;
 import com.scaler.userauthservice.dtos.UserDoesNotExistsExceptionDto;
+import com.scaler.userauthservice.exceptions.InvalidPasswordException;
 import com.scaler.userauthservice.exceptions.UserAlreadyExistsException;
 import com.scaler.userauthservice.exceptions.UserDoesNotExistException;
 import org.springframework.http.HttpStatus;
@@ -28,5 +30,12 @@ public class ControllerAdvice {
         UserDoesNotExistsExceptionDto dto = new UserDoesNotExistsExceptionDto();
         dto.setMessage(e.getMessage());
         return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
+    }
+
+    public ResponseEntity<InvalidPasswordExceptionDto>
+    handleInvalidPasswordException(InvalidPasswordException e){
+        InvalidPasswordExceptionDto dto = new InvalidPasswordExceptionDto();
+        dto.setMessage(e.getMessage());
+        return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
     }
 }
