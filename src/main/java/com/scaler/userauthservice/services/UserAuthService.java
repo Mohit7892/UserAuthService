@@ -1,5 +1,9 @@
 package com.scaler.userauthservice.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scaler.userauthservice.clients.KafkaProducerHelperClient;
+import com.scaler.userauthservice.dtos.EmailDto;
 import com.scaler.userauthservice.dtos.UserTokenDto;
 import com.scaler.userauthservice.exceptions.InvalidPasswordException;
 import com.scaler.userauthservice.exceptions.UserAlreadyExistsException;
@@ -40,8 +44,14 @@ public class UserAuthService implements IAuthService {
     @Autowired
     private SecretKey secretKey;
 
+    @Autowired
+    private KafkaProducerHelperClient kafkaProducerHelperClient;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Override
-    public User signup(String username, String email, String password) throws UserAlreadyExistsException {
+    public User signup(String username, String email, String password) throws UserAlreadyExistsException, JsonProcessingException {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isPresent())
             throw new UserAlreadyExistsException("User with this email already exists!!",
@@ -61,6 +71,17 @@ public class UserAuthService implements IAuthService {
         //newUser.setUpdatedAt(System.currentTimeMillis());
 
         userRepository.save(newUser);
+
+        //set up message or email content
+        EmailDto emailDto = new EmailDto();
+        emailDto.setTo(email);
+        emailDto.setFrom("manoharrag721@gmail.com");
+        emailDto.setSubject("Welcome to user sign up service");
+        emailDto.setBody("Hi "+username+"!!, welcome to ecomm market place.");
+
+        //send message to kafka with email type user-signup as topic
+        kafkaProducerHelperClient.sendMessage("USER_SIGNUP",
+                objectMapper.writeValueAsString(emailDto));
 
         //set the roles
         Optional<Role> optionalRole = roleRepository.findByRoleName("DEFAULT");

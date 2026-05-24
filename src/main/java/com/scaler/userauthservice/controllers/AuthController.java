@@ -1,5 +1,6 @@
 package com.scaler.userauthservice.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.scaler.userauthservice.dtos.*;
 import com.scaler.userauthservice.exceptions.InvalidPasswordException;
 import com.scaler.userauthservice.exceptions.UnauthorizeException;
@@ -26,7 +27,7 @@ public class AuthController {
 
     //sign-up: localhost:8080/auth/signup
     @PostMapping("/signup")
-    public ResponseEntity<UserDto> signup(@RequestBody SignupRequestDto signupRequestDto) throws UserAlreadyExistsException {
+    public ResponseEntity<UserDto> signup(@RequestBody SignupRequestDto signupRequestDto) throws UserAlreadyExistsException, JsonProcessingException {
         String username = signupRequestDto.getUsername();
         String email = signupRequestDto.getEmail();
         String password = signupRequestDto.getPassword();
