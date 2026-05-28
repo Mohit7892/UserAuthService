@@ -182,4 +182,10 @@ public class UserAuthService implements IAuthService {
                 return true;
         }
     }
+
+    public User getUserById(Long id) throws UserDoesNotExistException {
+        Optional<User> optionalUser = userRepository.findUserById(id);
+        return optionalUser.orElseThrow(
+                () -> new UserDoesNotExistException("No user with this id : "+id));
+    }
 }

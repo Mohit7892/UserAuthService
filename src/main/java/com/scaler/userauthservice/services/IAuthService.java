@@ -13,4 +13,5 @@ public interface IAuthService {
     User signup(String username, String email, String password) throws UserAlreadyExistsException, JsonProcessingException;
     UserTokenDto login(String email, String password) throws UserDoesNotExistException, InvalidPasswordException;
     boolean validateToken(String token);
+    User getUserById(Long id) throws UserDoesNotExistException;
 }
